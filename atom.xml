@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>http://47.115.222.8/</id>
+    <title>gulugulu1103&apos;s Blog</title>
+    <updated>2023-01-14T12:29:48.262Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="http://47.115.222.8/"/>
+    <link rel="self" href="http://47.115.222.8/atom.xml"/>
+    <subtitle>HelloWorld!</subtitle>
+    <logo>http://47.115.222.8/images/avatar.png</logo>
+    <icon>http://47.115.222.8/favicon.ico</icon>
+    <rights>All rights reserved 2023, gulugulu1103&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[红米AC2100如何安装OpenWrt，加装OpenClash]]></title>
+        <id>http://47.115.222.8/post/EN9sOFuKJ/</id>
+        <link href="http://47.115.222.8/post/EN9sOFuKJ/">
+        </link>
+        <updated>2023-01-12T13:16:06.000Z</updated>
+        <summary type="html"><![CDATA[<p>安装之后不用电脑挂着Clash了，解锁了160mhz之后无线网络性能得到了提升，这次折腾性价比还不错</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>安装之后不用电脑挂着Clash了，解锁了160mhz之后无线网络性能得到了提升，这次折腾性价比还不错</p>
+<!-- more -->
+<h2 id="固件下载">固件下载</h2>
+<p><a href="https://openwrt.org/toh/xiaomi/xiaomi_redmi_router_ac2100">https://openwrt.org/toh/xiaomi/xiaomi_redmi_router_ac2100</a><br>
+<img src="http://47.115.222.8//post-images/1673529573192.png" alt="" loading="lazy"><br>
+在<code>Firmware OpenWrt Install</code>一栏中下载kernel1和rootfs0二进制文件</p>
+<h2 id="获取root权限">获取Root权限</h2>
+<p>参考博客：<a href="https://www.lotlab.org/2021/06/13/install-openwrt-on-redmi-ac2100/">https://www.lotlab.org/2021/06/13/install-openwrt-on-redmi-ac2100/</a><br>
+因为我的固件正好是2.0.23所以就不用降级</p>
+<ol>
+<li>访问小米路由器后台<a href="192.168.31.1">192.168.31.1</a></li>
+<li>记住STOK<br>
+<code>http://192.168.31.1/cgi-bin/luci/;stok=[STOK]/web/home#router</code><br>
+地址栏中的<code>[STOK]</code>复制下来放进txt</li>
+<li>复制下面的这一行地址到浏览器的地址栏，替换stok参数并访问。<br>
+<code>http://192.168.31.1/cgi-bin/luci/;stok=[STOK]/api/misystem/set_config_iotdev?bssid=Xiaomi&amp;user_id=longdike&amp;ssid=-h%3B%20nvram%20set%20ssh_en%3D1%3B%20nvram%20commit%3B%20sed%20-i%20's%2Fchannel%3D.*%2Fchannel%3D%5C%22debug%5C%22%2Fg'%20%2Fetc%2Finit.d%2Fdropbear%3B%20%2Fetc%2Finit.d%2Fdropbear%20start%3B</code><br>
+此命令的作用是启用SSH服务器</li>
+<li>复制下面的这一行地址到浏览器的地址栏，替换stok参数并访问。<br>
+<code>http://192.168.31.1/cgi-bin/luci/;stok=[STOK]/api/misystem/set_config_iotdev?bssid=gallifrey&amp;user_id=doctor&amp;ssid=-h%0Aecho%20-e%20%27password%5Cnpassword%27%20%7C%20passwd%20root%0A</code></li>
+</ol>
+<p>此命令执行完毕后，会将你的路由器的root用户密码修改为 <code>password</code><br>
+执行完毕后，你已经可以通过ssh访问路由器了。</p>
+<h2 id="将固件传入路由器">将固件传入路由器</h2>
+<p>打开cmd，输入<code>ssh root@192.168.31.1</code>，输入密码<code>password</code>，路由器内部是Linux系统，我们随便找一个可读写的路径传入固件即可。<br>
+新开一个cmd，输入<code>scp [源文件] root@192.168.31.1:[写入路径]</code>这里的写入路径可以是<code>tmp</code>或者<code>home</code></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[😎使用moviepy生成单一图片视频]]></title>
+        <id>http://47.115.222.8/post/Z1oY2BTWw/</id>
+        <link href="http://47.115.222.8/post/Z1oY2BTWw/">
+        </link>
+        <updated>2023-01-09T13:47:43.000Z</updated>
+        <summary type="html"><![CDATA[<p>踩坑了，找了很久doc和bing，记录一下</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>踩坑了，找了很久doc和bing，记录一下</p>
+<!-- more -->
+<p>首先引入模块，赋值图片</p>
+<pre><code class="language-python">from moviepy.editor import *
+img = &quot;img.png&quot;
+</code></pre>
+<p>然后赋值clip，设置clip的持续时间</p>
+<pre><code class="language-python">clip = ImageSequenceClip([img], fps=60)
+clip = clip.set_duration(10)
+clip.ipython_display(fps=60, loop=True, autoplay=True)
+</code></pre>
+<p>最后一行会在当前目录生成<code>__temp__.mp4</code>，效果如图：<br>
+<img src="http://47.115.222.8//post-images/1673272837685.png" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
+</feed>
